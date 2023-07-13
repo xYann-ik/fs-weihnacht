@@ -1,0 +1,206 @@
+/* Main elements */
+html {
+    height: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+*, *:before, *:after {
+box-sizing: inherit;
+}
+
+body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: start;
+    background: #e3f2fd;
+    margin: 0;
+    min-height: 100%;
+}
+
+body,
+input,
+textarea,
+button {
+    font-size: 18px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input,
+textarea,
+button {
+    padding: 5px;
+    margin: 10px 0;
+}
+
+body > video {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+
+header {
+    width: 100%;
+    padding: 30px 50px;
+}
+
+a {
+    color: #c9ae57;
+}
+a.btn {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 5px 0;
+    text-align: center;
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.25s;
+}
+a.btn.red {
+    color: #e2001a;
+    border-color: #e2001a;
+}
+a.btn.green {
+    color: #2bbb67;
+    border-color: #2bbb67;
+}
+a.btn:hover,
+a.btn:focus,
+a.btn:active {
+    color: #fff;
+    border-color: #002b67;
+    background-color: #002b67;
+}
+a.btn.red:hover,
+a.btn.red:focus,
+a.btn.red:active {
+    color: #fff;
+    border-color: #e2001a;
+    background-color: #e2001a;
+}
+a.btn.green:hover,
+a.btn.green:focus,
+a.btn.green:active {
+    color: #fff;
+    border-color: #2bbb67;
+    background-color: #2bbb67;
+}
+
+/* Generic classes */
+.flex {
+    display: flex;
+}
+
+/* Layout */
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    background: rgb(0, 43, 103, 0.75);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    border-radius: 30px;
+}
+
+form {
+    display: flex;
+    flex-flow: column;
+}
+
+/* Card form */
+.templates_wrapper {
+    display: grid;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    grid-template-columns: repeat(3, 1fr);
+}
+.templates_wrapper input {
+    visibility: hidden;
+    position: absolute;
+}
+.templates_wrapper img {
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.templates_wrapper input:checked + label img {
+    box-shadow: 0 0 0 5px #fff;
+    border-radius: 5px;
+}
+.plzcity input:first-of-type {
+    width: 150px;
+    margin-right: 10px;
+}
+.plzcity input + input {
+    flex: 1 0 auto;
+}
+
+/* Card preview */
+.card-preview-wrapper {
+    width: 100%;
+    flex: 1 0 auto;
+    color: #333;
+}
+.card-preview {
+    position: relative;
+    transition: all 0.5s;
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+.card-preview .front {
+    backface-visibility: hidden;
+}
+.card-preview img {
+    width: 100%;
+}
+.card-preview .back {
+    background: #fff;
+    padding: 50px;
+    display: flex;
+}
+.card-preview .back .message {
+    width: 50%;
+}
+.card-preview .back .address {
+    width: 50%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    padding: 5% 5% 5% 15%;
+}
+.card-preview .back * {
+    margin: 0;
+}
+.card-preview.show-back {
+    transform: rotateY(180deg);
+}
+
+/* AG Grid */
+.aggrid-buttons span:not([class]) {
+    display: flex;
+    gap: 10px;
+}
+.aggrid-buttons .btn {
+    flex: 1;
+    padding: 5px;
+    line-height: 1.5;
+}
+
+/* JS Choice */
+.choices {
+    color: #333;
+}
+.choices__inner {
+    min-height: 0;
+}
