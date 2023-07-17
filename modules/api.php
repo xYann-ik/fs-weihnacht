@@ -6,11 +6,13 @@ class PostAPI {
     protected $db;
     
     public $templates;
+    public $cardsPath;
 
     function __construct() {
         list($servername, $database, $username, $password) = require_once('dbconfig.php');
 
         $this->db = mysqli_connect($servername, $username, $password, $database);
+        $this->cardsPath = 'cards/';
         $this->templates = require('templates.php');
 
         if ($this->db->connect_error) {
@@ -77,7 +79,7 @@ class PostAPI {
     function subscriberDeny ($id = 0) {
         if (is_numeric($id) && $id > 0) {
             $data = $this->getSubscribers($id);
-            @unlink('cards/' . $data['file'] . '.jpg');
+            @unlink($this->cardsPath . $data['file'] . '.jpg');
             $this->db->query("DELETE FROM `subscribers` WHERE id = " . intval($id) . ";");
         }
     }
@@ -103,11 +105,32 @@ class PostAPI {
         }
     }
 
+    // Deletes all unused card files
+    function deleteUnusedFiles () {
+        $files = glob($this->cardsPath . '*');
+        $keepFiles = [];
+        $threshold = strtotime('-3 day');
+        
+        $data = $this->db->query("SELECT file FROM `subscribers`;");
+
+        while ($row = mysqli_fetch_assoc($data)) {
+            $keepFiles[] = $this->cardsPath . $row['file'] . '.jpg';
+        }
+
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                if ($threshold >= filemtime($file) && !in_array($file, $keepFiles)) {
+                    @unlink($file);
+                }
+            }
+        }
+    }
+
     function applyImageTemplate ($uploadedImage) {
         $template = htmlspecialchars($_POST['template']);
         $templates_folder = 'assets/templates/';
         $template_image = $templates_folder.$template.'.jpg';
-        $card_name = 'card_'.bin2hex(random_bytes(18));
+        $card_name = 'card_'.bin2hex(random_bytes(18)).'-'.date('Y-m-d.H:i:s');
 
         if (!file_exists($template_image) || !$this->templates[$template]) {
             $template = 'template1';
@@ -118,9 +141,20 @@ class PostAPI {
         if ($uploadedImage) {
             $width = $this->templates[$template]['width'] ?: 300;
             $height = $this->templates[$template]['height'] ?: 300;
-
             
+
             $userimage = WideImage::loadFromFile($uploadedImage);
+
+            // Rotate cam pictures
+            $origWidth = $width;
+            switch (@exif_read_data($uploadedImage)['Orientation'] ?: 0) {
+                case 6:
+                case 8:
+                    $width = $height;
+                    $height = $origWidth;
+                    break;
+            }
+
             if ($this->templates[$template]['crop']) {
                 $userimage = $userimage->resize($width, $height, 'outside');
                 $userimage = $userimage->crop('center', 'middle', $width, $height);
@@ -129,12 +163,25 @@ class PostAPI {
                 $userimage = $userimage->resize($width, $height, $this->templates[$template]['fit'] ?: 'inside');
             }
 
+            // Rotate cam pictures
+            switch (@exif_read_data($uploadedImage)['Orientation'] ?: 0) {
+                case 3:
+                    $userimage = $userimage->rotate(180, null, false);
+                    break;
+                case 6:
+                    $userimage = $userimage->rotate(90, null, false);
+                    break;
+                case 8:
+                    $userimage = $userimage->rotate(-90, null, false);
+                    break;
+            }
+
             $new = $template_file->merge($userimage, $this->templates[$template]['x'], $this->templates[$template]['y'], 100);
 
-            $new->saveToFile('cards/' . $card_name . '.jpg');
+            $new->saveToFile($this->cardsPath . $card_name . '.jpg');
         }
         else {
-            $template_file->saveToFile('cards/' . $card_name . '.jpg');
+            $template_file->saveToFile($this->cardsPath . $card_name . '.jpg');
         }
 
         $_SESSION['card_data']['file'] = $card_name;

@@ -23,6 +23,8 @@ if ($_GET['id'] && is_numeric($_GET['id'])) {
     header('Location: backend.php');
 }
 
+$p->deleteUnusedFiles();
+
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -48,7 +50,9 @@ if ($_GET['id'] && is_numeric($_GET['id'])) {
     else {
     ?>
         <header>
-            <img src="assets/img/logo.png" alt="Feldschlösschen" />
+            <a href="index.php">
+                <img src="assets/img/logo.png" alt="Feldschlösschen" />
+            </a>
         </header>
         <section class="container">
             <?php
@@ -58,63 +62,83 @@ if ($_GET['id'] && is_numeric($_GET['id'])) {
             <a class="btn" href="?action=logout">Logout</a>
 
             <script type="text/javascript">
-                const gridOptions = {
-                    columnDefs: [
-                        { field: 'name' },
-                        { field: 'email' },
-                        { field: 'address' },
-                        { field: 'city' },
-                        { field: 'plz' },
-                        { field: 'date', sort: 'desc' },
-                        {
-                            field: 'verified',
-                            headerName: 'Bestätigt',
-                            cellRenderer: function(params) {
-                                return params.data.verified == 1 ? 'Ja' : 'Nein'
+            const booleanFilter = {
+                filterOptions: [
+                    {
+                        displayKey: 'true',
+                        displayName: 'Ja',
+                        predicate: (_, cellValue) => +cellValue === 1,
+                        numberOfInputs: 0,
+                    },
+                    {
+                        displayKey: 'false',
+                        displayName: 'Nein',
+                        predicate: (_, cellValue) => +cellValue === 0,
+                        numberOfInputs: 0,
+                    }
+                ],
+                suppressAndOrCondition: true,
+            };
+            const gridOptions = {
+                columnDefs: [
+                    { field: 'name' },
+                    { field: 'email' },
+                    { field: 'address' },
+                    { field: 'city' },
+                    { field: 'plz' },
+                    { field: 'date', sort: 'desc' },
+                    {
+                        field: 'verified',
+                        headerName: 'Bestätigt',
+                        
+                        filter: 'agNumberColumnFilter',
+                        filterParams: booleanFilter,
+                        cellRenderer: function(params) {
+                            return params.data.verified == 1 ? 'Ja' : 'Nein'
+                        }
+                    },
+                    {
+                        field: 'actions',
+                        autoHeight: true,
+                        cellClass: 'aggrid-buttons',
+                        cellRenderer: function(params) {
+                            if (params.data.verified != 1) {
+                                let keyData = params.data.key;
+                                let accept = '<a class="btn green" href="?action=accept&id=' + params.data.id + '" onclick="return confirm(\'<?=$lang['confirmAccept']?>\')">&check;</a>';
+                                let deny = '<a class="btn red" href="?action=deny&id=' + params.data.id + '" onclick="return confirm(\'<?=$lang['confirmDeny']?>\')">&cross;</a>';
+                                return accept + ' ' + deny;
                             }
-                        },
-                        {
-                            field: 'actions',
-                            autoHeight: true,
-                            cellClass: 'aggrid-buttons',
-                            cellRenderer: function(params) {
-                                if (params.data.verified != 1) {
-                                    let keyData = params.data.key;
-                                    let accept = '<a class="btn green" href="?action=accept&id=' + params.data.id + '" onclick="return confirm()">&check;</a>';
-                                    let deny = '<a class="btn red" href="?action=deny&id=' + params.data.id + '" onclick="return confirm()">&cross;</a>';
-                                    return accept + ' ' + deny;
+                        }
+                    }
+                ],
+                
+                defaultColDef: {
+                    resizable: true,
+                    sortable: true,
+                    filter: true
+                },
+                rowSelection: 'single',
+                animateRows: true,
+                sizeColumnsToFit: true,
+                getRowStyle: function(params) {
+                    if (params.data.verified == 1) {
+                        return { background: '#acebC6' };
+                    }
+                },
+                
+                // example event handler
+                onCellClicked: params => {
+                    if (params.column.colId !== 'actions') {
+                        const cardPreview = GLightbox({
+                            loop: true,
+                            elements: [
+                                {
+                                    'href': '?subscriber=' + params.data.id
+                                },
+                                {
+                                    'href': 'cards/' + params.data.file + '.jpg',
+                                    'type': 'image'
                                 }
-                            }
-                        }
-                    ],
-
-                    defaultColDef: {
-                        resizable: true,
-                        sortable: true,
-                        filter: true
-                    },
-                    rowSelection: 'single',
-                    animateRows: true,
-                    sizeColumnsToFit: true,
-                    getRowStyle: function(params) {
-                        if (params.data.verified == 1) {
-                            return { background: '#acebC6' };
-                        }
-                    },
-
-                    // example event handler
-                    onCellClicked: params => {
-                        if (params.column.colId !== 'actions') {
-                            const cardPreview = GLightbox({
-                                loop: true,
-                                elements: [
-                                    {
-                                        'href': '?subscriber=' + params.data.id
-                                    },
-                                    {
-                                        'href': 'cards/' + params.data.file + '.jpg',
-                                        'type': 'image'
-                                    }
                                 ]
                             });
                             cardPreview.open();
@@ -124,11 +148,11 @@ if ($_GET['id'] && is_numeric($_GET['id'])) {
                         params.api.sizeColumnsToFit();
                     }
                 }
-
+                
                 const eGridDiv = document.getElementById('fs-grid');
                 new agGrid.Grid(eGridDiv, gridOptions);
                 gridOptions.api.setRowData(<?php $p->getSubscribers(); ?>);
-            </script>
+                </script>
     <?php
     }
     ?>
