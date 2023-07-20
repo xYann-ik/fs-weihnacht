@@ -182,17 +182,17 @@ class PostAPI {
             }
 
             $new = $template_file->merge($userimage, $templateData['x'], $templateData['y'], 100);
-
-            if ($templateData['overlay']) {
-                $overlay_image = WideImage::loadFromFile($templates_folder . $templateData['overlay']);
-                $new = $new->merge($overlay_image, 0, 0, 100);
-            }
-
-            $new->saveToFile($this->cardsPath . $card_name . '.jpg');
         }
         else {
-            $template_file->saveToFile($this->cardsPath . $card_name . '.jpg');
+            $new = $template_file;
         }
+
+        if ($templateData['overlay']) {
+            $overlay_image = WideImage::loadFromFile($templates_folder . $templateData['overlay']);
+            $new = $new->merge($overlay_image, 0, 0, 100);
+        }
+
+        $new->saveToFile($this->cardsPath . $card_name . '.jpg');
 
         $_SESSION['card_data']['file'] = $card_name;
     }

@@ -1,4 +1,15 @@
 <?php
+/*
+    Defines the post card templates
+    Config:
+        width => width of user uploaded image
+        height => height of user uploaded image
+        x => distance from left side
+        y => distance from top side
+        crop => true to crop the uploaded image and force the width/height
+        rotate => rotation angle of uploaded image
+        overlay => image in /card/ to overlay onto uploaded image
+*/
 return array(
     'template1' => [
         'width' => 500,
