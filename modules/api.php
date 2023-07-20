@@ -120,7 +120,7 @@ class PostAPI {
         foreach ($files as $file) {
             if (is_file($file)) {
                 if ($threshold >= filemtime($file) && !in_array($file, $keepFiles)) {
-                    @unlink($file);
+                    // @unlink($file);
                 }
             }
         }
