@@ -131,16 +131,17 @@ class PostAPI {
         $templates_folder = 'assets/templates/';
         $template_image = $templates_folder.$template.'.jpg';
         $card_name = 'card_'.bin2hex(random_bytes(18)).'-'.date('Y-m-d.H:i:s');
+        $templateData = $this->templates[$template];
 
-        if (!file_exists($template_image) || !$this->templates[$template]) {
+        if (!file_exists($template_image) || !$templateData) {
             $template = 'template1';
             $template_image = $templates_folder.$template.'.jpg';
         }
         
         $template_file = WideImage::loadFromFile($template_image)->resize(1819, 1311, 'fill');
         if ($uploadedImage) {
-            $width = $this->templates[$template]['width'] ?: 300;
-            $height = $this->templates[$template]['height'] ?: 300;
+            $width = $templateData['width'] ?: 300;
+            $height = $templateData['height'] ?: 300;
             
 
             $userimage = WideImage::loadFromFile($uploadedImage);
@@ -155,12 +156,12 @@ class PostAPI {
                     break;
             }
 
-            if ($this->templates[$template]['crop']) {
+            if ($templateData['crop']) {
                 $userimage = $userimage->resize($width, $height, 'outside');
                 $userimage = $userimage->crop('center', 'middle', $width, $height);
             }
             else {
-                $userimage = $userimage->resize($width, $height, $this->templates[$template]['fit'] ?: 'inside');
+                $userimage = $userimage->resize($width, $height, $templateData['fit'] ?: 'inside');
             }
 
             // Rotate cam pictures
@@ -176,7 +177,16 @@ class PostAPI {
                     break;
             }
 
-            $new = $template_file->merge($userimage, $this->templates[$template]['x'], $this->templates[$template]['y'], 100);
+            if ($templateData['rotate']) {
+                $userimage = $userimage->rotate($templateData['rotate']);
+            }
+
+            $new = $template_file->merge($userimage, $templateData['x'], $templateData['y'], 100);
+
+            if ($templateData['overlay']) {
+                $overlay_image = WideImage::loadFromFile($templates_folder . $templateData['overlay']);
+                $new = $new->merge($overlay_image, 0, 0, 100);
+            }
 
             $new->saveToFile($this->cardsPath . $card_name . '.jpg');
         }
