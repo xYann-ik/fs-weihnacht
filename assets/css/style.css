@@ -160,6 +160,10 @@ label.upload input {
     flex-wrap: wrap;
     grid-template-columns: repeat(4, 1fr);
 }
+.templates_wrapper label {
+    position: relative;
+    display: block;
+}
 .templates_wrapper input {
     visibility: hidden;
     position: absolute;
@@ -170,7 +174,14 @@ label.upload input {
     cursor: pointer;
     transition: all 0.3s;
 }
-.templates_wrapper input:checked + label img {
+.templates_wrapper img + img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+.templates_wrapper input:checked + label img:first-child {
     box-shadow: 0 0 0 5px #fff;
     border-radius: 5px;
 }

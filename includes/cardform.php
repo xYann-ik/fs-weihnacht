@@ -27,6 +27,11 @@
                     <input type="radio" id="<?=$id?>" required name="template" value="<?=$id?>" <?=$_SESSION['card_data']['template'] === $id ? 'checked' : ''?>>
                     <label for="<?=$id?>">
                         <img src="assets/templates/<?=$id?>.jpg" />
+                        <?php
+                        if ($tmp['overlay']) {
+                            echo '<img src="assets/templates/'.$tmp['overlay'].'" />';
+                        }
+                        ?>
                     </label>
                 </div>
                 <?php
