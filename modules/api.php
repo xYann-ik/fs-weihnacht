@@ -109,7 +109,7 @@ class PostAPI {
     function deleteUnusedFiles () {
         $files = glob($this->cardsPath . '*');
         $keepFiles = [];
-        $threshold = strtotime('-3 day');
+        $threshold = strtotime('-2 day');
         
         $data = $this->db->query("SELECT file FROM `subscribers`;");
 
@@ -120,7 +120,7 @@ class PostAPI {
         foreach ($files as $file) {
             if (is_file($file)) {
                 if ($threshold >= filemtime($file) && !in_array($file, $keepFiles)) {
-                    // @unlink($file);
+                    @unlink($file);
                 }
             }
         }
