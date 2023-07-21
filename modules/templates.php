@@ -28,7 +28,9 @@ return array(
         'height' => '720',
         'x' => 'center + 35',
         'y' => 'center - 21',
-        'crop' => true
+        'crop' => true,
+        'rotate' => 20,
+        'overlay' => 'overlay.png'
     ],
     'template4' => [
         'width' => 500,
