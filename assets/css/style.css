@@ -119,6 +119,16 @@ a {
     border-radius: 30px;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
+.container.backend {
+    padding: 0;
+    overflow: hidden;
+    max-width: 1800px;
+}
+.container.backend + .btn {
+    position: fixed;
+    bottom: 50px;
+    left: 50px;
+}
 
 form {
     display: flex;

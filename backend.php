@@ -54,12 +54,10 @@ $p->deleteUnusedFiles();
                 <img src="assets/img/logo.png" alt="Feldschlösschen" />
             </a>
         </header>
-        <section class="container">
+        <section class="container backend">
             <?php
             ?>
             <div id="fs-grid" class="ag-theme-alpine" style="height: 70vh"></div>
-
-            <a class="btn" href="?action=logout">Logout</a>
 
             <script type="text/javascript">
             const booleanFilter = {
@@ -157,5 +155,7 @@ $p->deleteUnusedFiles();
     }
     ?>
     </section>
+
+    <a class="btn" href="?action=logout">Logout</a>
 </body>
 </html>

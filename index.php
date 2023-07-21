@@ -32,8 +32,8 @@
             <img src="assets/img/logo.png" alt="Feldschlösschen" />
         </a>
     </header>
-    <video playsinline="" loop="loop" muted="muted" autoplay="autoplay" class="c-block-hero__video" data-v-6f9497c5="">
-        <source src="https://media.umbraco.io/feldschloesschen/25md3o35/fs_sustainability_16x9_720p_17s.mp4" type="video/mp4" data-v-6f9497c5="">
+    <video playsinline loop="loop" muted="muted" autoplay="autoplay">
+        <source src="assets/video/snow.mp4" type="video/mp4">
     </video>
     <section class="container">
         <?php
