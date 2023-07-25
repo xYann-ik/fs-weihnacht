@@ -71,6 +71,7 @@ class PostAPI {
         if (is_numeric($id) && $id > 0) {
             $data = $this->getSubscribers($id);
             $this->db->query("UPDATE `subscribers` SET verified = TRUE WHERE id = " . intval($id) . ";");
+
             echo 'Submit to Post API';
         }
     }
