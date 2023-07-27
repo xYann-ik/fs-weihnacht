@@ -8,11 +8,11 @@
         <input type="text" name="r[city]" placeholder="Ort" required value="<?=$_SESSION['card_data']['r']['city']?>" />
     </div>
     <textarea name="r[message]" maxlength="900" placeholder="<?=$lang['entermessage']?>" rows="6"><?=$_SESSION['card_data']['r']['message']?></textarea>
-    <select class="js-choice">
+    <select class="js-choice" name="establishment">
         <?php
             $ests = $p->getEstablishments();
             foreach ($ests as $est) {
-                echo '<option>' . $est['name'] . ' - ' . $est['plz'] . ' ' . $est['city'] . '</option>';
+                echo '<option value="'.$est['id'].'">' . $est['name'] . ' - ' . $est['plz'] . ' ' . $est['city'] . '</option>';
             }
         ?>
     </select>

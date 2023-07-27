@@ -42,8 +42,8 @@ class PostAPI {
     }
 
     /* Get array of establishments */
-    function getEstablishments () {
-        $data = $this->db->query("SELECT * FROM `establishments` ORDER BY plz, city, name");
+    function getEstablishments ($id = null) {
+        $data = $this->db->query("SELECT * FROM `establishments` ORDER BY plz, city, name" . ($id ? " WHERE id = " . intval($id) : ";"));
         $ests = array();
         while ($row = mysqli_fetch_assoc($data)) {
             $ests[] = $row;
@@ -70,7 +70,14 @@ class PostAPI {
     function subscriberAccept ($id = 0) {
         if (is_numeric($id) && $id > 0) {
             $data = $this->getSubscribers($id);
+            $sender = $this->getEstablishments($data);
             $this->db->query("UPDATE `subscribers` SET verified = TRUE WHERE id = " . intval($id) . ";");
+            
+            require_once('modules/postcardApi.php');
+            $pcApi = new PostcardAPI;
+
+            $pcApi->auth();
+            $pcApi->create($data, $sender);
 
             echo 'Submit to Post API';
         }
@@ -107,10 +114,10 @@ class PostAPI {
     }
 
     // Deletes all unused card files
-    function deleteUnusedFiles () {
+    function deleteUnusedFiles ($days = 3) {
         $files = glob($this->cardsPath . '*');
         $keepFiles = [];
-        $threshold = strtotime('-2 day');
+        $threshold = strtotime('-'.intval($days).' day');
         
         $data = $this->db->query("SELECT file FROM `subscribers`;");
 

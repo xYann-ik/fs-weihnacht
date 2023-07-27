@@ -54,6 +54,7 @@ class PostCardApi {
             $this->token = $result['access_token'];
 
             $this->create();
+
             return true;
         }
         echo 'Something went wrong, please refresh the page and try again.';
@@ -61,7 +62,6 @@ class PostCardApi {
     }
 
     function create () {
-
         //open connection
         $ch = curl_init();
 
@@ -103,17 +103,15 @@ class PostCardApi {
                 ]
             );
 
-            print_r([
-                'image' => new CURLFile ('assets/templates/overlay.png', 'image/png', 'image')
-            ]);
-            
             $this->cardCurl('/image', 'put',
                 [
-                    'image' => new CURLFile ('assets/templates/overlay.png', 'image/png', 'image')
-                ]
+                    //'image' => new CURLFile('fs-weihnacht/cards/card_533e99eee8702f82c1b89a201f5a5f0fab7a.jpg', 'multipart/form-data', 'image')
+                    'image' => 'cards/card_533e99eee8702f82c1b89a201f5a5f0fab7a.jpg'
+                ], true
             );
     
-            $preview = $this->cardCurl('/previews/back');
+            // $preview = $this->cardCurl('/previews/back');
+            $preview = $this->cardCurl('/state');
    
             print_r($preview);
             exit;
@@ -134,16 +132,14 @@ class PostCardApi {
             curl_setopt($ch, CURLOPT_INFILE, $image);
             curl_setopt($ch, CURLOPT_INFILESIZE, filesize($file));
             */
-
         }
 
         curl_setopt($ch, CURLOPT_URL, $this->api['cardUrl'] . $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, strtoupper($type));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: ' . ($file ? 'multipart/form-data' : 'application/json'), "Authorization: Bearer " . $this->token ));
-        curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: ' . ($file ? 'multipart/form-data' : 'application/json'), 'Authorization: Bearer ' . $this->token ));
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        //$result = curl_exec($ch);
         
-        /*
         curl_setopt($ch, CURLOPT_VERBOSE, true);
         $streamVerboseHandle = fopen('php://temp', 'w+');
         curl_setopt($ch, CURLOPT_STDERR, $streamVerboseHandle);
@@ -162,7 +158,6 @@ class PostCardApi {
         
         echo "cUrl verbose information " . $url . ":\n", 
              "<pre>", htmlspecialchars($verboseLog), "</pre>\n";
-             */
 
         return json_decode($result, true);
     }

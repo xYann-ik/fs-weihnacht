@@ -23,12 +23,14 @@ if ($_GET['id'] && is_numeric($_GET['id'])) {
     header('Location: backend.php');
 }
 
+
 require_once('modules/postcardApi.php');
 $pcApi = new PostcardAPI;
 
 $pcApi->auth();
 
-$p->deleteUnusedFiles();
+// Delete all temp cards older than X days
+$p->deleteUnusedFiles(2);
 
 ?><!DOCTYPE html>
 <html>
