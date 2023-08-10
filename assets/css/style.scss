@@ -14,7 +14,7 @@ html {
 }
 
 *, *:before, *:after {
-box-sizing: inherit;
+    box-sizing: inherit;
 }
 
 body {
@@ -40,18 +40,6 @@ textarea,
 button {
     padding: 5px;
     margin: 10px 0;
-}
-
-body > video {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
-    object-fit: cover;
-    height: 100%;
-    width: 100%;
 }
 
 header {
