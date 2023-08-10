@@ -32,9 +32,6 @@
             <img src="assets/img/logo.png" alt="Feldschlösschen" />
         </a>
     </header>
-    <video playsinline loop="loop" muted="muted" autoplay="autoplay">
-        <source src="assets/video/snow.mp4" type="video/mp4">
-    </video>
     <section class="container">
         <?php
             if ($_GET['admin'] == 1) {
