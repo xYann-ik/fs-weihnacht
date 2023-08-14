@@ -7,6 +7,7 @@ class PostAPI {
     
     public $templates;
     public $cardsPath;
+    public $step;
 
     function __construct() {
         list($servername, $database, $username, $password) = require_once('dbconfig.php');
@@ -14,6 +15,7 @@ class PostAPI {
         $this->db = mysqli_connect($servername, $username, $password, $database);
         $this->cardsPath = 'cards/';
         $this->templates = require('templates.php');
+        $this->step = intval($_GET['step']) ?: 1;
 
         if ($this->db->connect_error) {
             die("Connection failed: " . $this->db->connect_error);

@@ -20,6 +20,7 @@ html {
 body {
     display: flex;
     flex-wrap: wrap;
+    flex-flow: column;
     align-items: center;
     align-content: start;
     background: var(--blue);
@@ -38,8 +39,11 @@ button {
 input,
 textarea,
 button {
-    padding: 5px;
+    padding: 8px 10px;
     margin: 10px 0;
+    border-radius: 20px;
+    border: 0;
+    color: var(--blue);
 }
 
 header {
@@ -55,40 +59,45 @@ a {
     padding: 8px 12px;
     margin: 5px 0;
     text-align: center;
-    border: 1px solid currentColor;
-    border-radius: 4px;
+    border: 1px solid #fff;
     text-decoration: none;
     transition: all 0.25s;
+    border-radius: 50px;
+    background: var(--blue);
+    color: #fff;
+    
+    &:hover,
+    &:focus,
+    &:active {
+        color: #fff;
+        border-color: var(--blue);
+        background-color: var(--blue);
+    }
     
     &.red {
         color: var(--red);
         border-color: var(--red);
+    
+        &:hover,
+        &:focus,
+        &:active {
+            color: #fff;
+            border-color: var(--red);
+            background-color: var(--red);
+        }
     }
     &.green {
         color: var(--green);
         border-color: var(--green);
+    
+        &:hover,
+        &:focus,
+        &:active {
+            color: #fff;
+            border-color: var(--green);
+            background-color: var(--green);
+        }
     }
-}
-.btn:hover,
-.btn:focus,
-.btn:active {
-    color: #fff;
-    border-color: var(--blue);
-    background-color: var(--blue);
-}
-.btn.red:hover,
-.btn.red:focus,
-.btn.red:active {
-    color: #fff;
-    border-color: var(--red);
-    background-color: var(--red);
-}
-.btn.green:hover,
-.btn.green:focus,
-.btn.green:active {
-    color: #fff;
-    border-color: var(--green);
-    background-color: var(--green);
 }
 
 /* Generic classes */
@@ -100,13 +109,8 @@ a {
 .container {
     width: 100%;
     max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
-    background: rgba(0, 43, 103, 0.75);
-    backdrop-filter: blur(10px);
+    margin: auto;
     color: #fff;
-    border-radius: 30px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
 
     &.backend {
         padding: 0;

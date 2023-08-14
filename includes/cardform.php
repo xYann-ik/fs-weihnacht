@@ -38,12 +38,6 @@
             }
         ?>
     </div>
-    <label class="upload">
-        <span>
-            Dein Foto hochladen!
-        </span>
-        <input type="file" name="userimage" value="<?=$_SESSION['file']?>" accept="image/*" />
-    </label>
 
     <button type="submit" class="btn">
         Absenden

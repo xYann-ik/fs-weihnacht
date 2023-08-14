@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="assets/css/style.css"/>
     
     <?php
-
         require_once('modules/startup.php');
         require_once('modules/api.php');
         $templates = require_once('modules/templates.php');
@@ -26,7 +25,7 @@
         }
     ?>
 </head>
-<body class="noscroll">
+<body>
     <header>
         <a href="index.php">
             <img src="assets/img/logo.png" alt="Feldschlösschen" />
@@ -41,23 +40,14 @@
                 include('includes/login.php');
             }
             else {
-                if ($_GET['success'] == 1) {
-                    include('includes/thanks.php');
-                }
-                elseif ($_POST) {
-                    include('includes/cardpreview.php');
-                    ?>
-                    <a class="btn" href="?save=1">
-                        <?=$lang['savesend']?>
-                    </a>
-                    <?php
-                }
-                else {
-                    include('includes/cardform.php');
-                }
+                include('includes/step'.$p->step.'.php');
             }
         ?>
-        <a class="btn" href="?admin=1">Admin</a>
     </section>
+    <footer>
+        <a href="">Teilnahmebedingungen</a>
+        <a href="">Impressum</a>
+        <a href="?admin=1">Admin</a>
+    </footer>
 </body>
 </html>
