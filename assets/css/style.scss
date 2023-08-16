@@ -23,9 +23,20 @@ body {
     flex-flow: column;
     align-items: center;
     align-content: start;
+    color: #fff;
     background: var(--blue);
     margin: 0;
     min-height: 100%;
+    transition: all 0.5s;
+
+    &.loading {
+        opacity: 0;
+        transform: translateX(50%);
+    }
+    &.unloading {
+        opacity: 0;
+        transform: translateX(-50%);
+    }
 }
 
 body,
@@ -156,47 +167,6 @@ label.upload:active span {
     background: #fff;
     color: var(--blue);
     transform: scale(1.2);
-}
-
-/* Card form */
-.templates_wrapper {
-    display: grid;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-    grid-template-columns: repeat(4, 1fr);
-}
-.templates_wrapper label {
-    position: relative;
-    display: block;
-}
-.templates_wrapper input {
-    visibility: hidden;
-    position: absolute;
-}
-.templates_wrapper img {
-    display: block;
-    width: 100%;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-.templates_wrapper img + img {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-}
-.templates_wrapper input:checked + label img:first-child {
-    box-shadow: 0 0 0 5px #fff;
-    border-radius: 5px;
-}
-.plzcity input:first-of-type {
-    width: 150px;
-    margin-right: 10px;
-}
-.plzcity input + input {
-    flex: 1 0 auto;
 }
 
 /* Card preview */

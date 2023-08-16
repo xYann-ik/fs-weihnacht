@@ -111,7 +111,11 @@ class PostAPI {
     function handleSubmit () {
         if ($_POST) {
             $_SESSION['card_data'] = $_POST;
-            $card = $this->applyImageTemplate($_FILES['userimage']['tmp_name']);
+            echo $this->applyImageTemplate($_FILES['userimage']['tmp_name']);
+        }
+        $templateImages = [];
+        foreach ($this->templates as $id => $template) {
+            $templateImages[] = '<img src="' . $this->cardsPath . $this->applyImageTemplate($_FILES['userimage']['tmp_name'], $id) . '.jpg" style="width: 80%" />';
         }
     }
 
@@ -136,16 +140,18 @@ class PostAPI {
         }
     }
 
-    function applyImageTemplate ($uploadedImage) {
+    function applyImageTemplate ($uploadedImage, $templateId = 1) {
         $template = htmlspecialchars($_POST['template']);
+        $template = $templateId;
         $templates_folder = 'assets/templates/';
         $template_image = $templates_folder.$template.'.jpg';
-        $card_name = 'card_'.bin2hex(random_bytes(18)).'-'.date('Y-m-d.H:i:s');
+        $card_name = 'card_'.bin2hex(random_bytes(18)).'-'.date('Ymd-His');
         $templateData = $this->templates[$template];
 
         if (!file_exists($template_image) || !$templateData) {
             $template = 'template1';
             $template_image = $templates_folder.$template.'.jpg';
+            $templateData = $this->templates[$template];
         }
         
         $template_file = WideImage::loadFromFile($template_image)->resize(1819, 1311, 'fill');
@@ -201,10 +207,11 @@ class PostAPI {
             $overlay_image = WideImage::loadFromFile($templates_folder . $templateData['overlay']);
             $new = $new->merge($overlay_image, 0, 0, 100);
         }
-
+        
         $new->saveToFile($this->cardsPath . $card_name . '.jpg');
 
         $_SESSION['card_data']['file'] = $card_name;
+        return $card_name;
     }
 }
 ?>

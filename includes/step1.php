@@ -5,11 +5,17 @@
     Einfach Foto von dir und deinen Freunden hochladen und Freude bereiten.
 </p>
 
+<form action="?step=2" method="POST" enctype="multipart/form-data">
+    <label class="upload">
+        <span>
+            Dein Foto hochladen!
+        </span>
+        <input type="file" name="userimage" value="<?=$_SESSION['file']?>" accept="image/*" />
+    </label>
+</form>
 
-<label class="upload">
-    <span>
-        Dein Foto hochladen!
-    </span>
-    <input type="file" name="userimage" value="<?=$_SESSION['file']?>" accept="image/*" />
-</label>
-<a href="?step=3">Drei</a>
+<script>
+    document.querySelector('input[type=file]').addEventListener('change', () => {
+        document.querySelector('form').submit()
+    })
+</script>

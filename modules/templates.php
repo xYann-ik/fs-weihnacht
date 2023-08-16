@@ -32,23 +32,11 @@ return array(
         'rotate' => 20,
         'overlay' => 'overlay.png'
     ],
-    'template4' => [
-        'width' => 500,
-        'height' => 500,
-        'x' => 100,
-        'y' => 250
-    ],
     'template5' => [
         'width' => 500,
         'height' => 500,
         'x' => 'right - 20',
         'y' => '20'
-    ],
-    'template6' => [
-        'width' => 500,
-        'height' => 500,
-        'x' => 400,
-        'y' => 250
     ]
 );
 
